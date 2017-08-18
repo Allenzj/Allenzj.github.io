@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="oracle," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="前言　　接触oralce一年多了，使用时对oracle的了解并不全面，只是当做数据源去使用，比如包、过程、块、表管理等就不太熟悉，只有一个概念性的了解，作为使用最多的关系型数据库之一，还是很有必要去全面学习了解，因此花了一个月时间对oracle来进行全面地学习，下面就是我系统学习的总结。">
+<meta name="keywords" content="oracle">
+<meta property="og:type" content="article">
+<meta property="og:title" content="oracle学习笔记（一）">
+<meta property="og:url" content="http://yoursite.com/2015/12/04/oracle1/index.html">
+<meta property="og:site_name" content="彭磊的博客">
+<meta property="og:description" content="前言　　接触oralce一年多了，使用时对oracle的了解并不全面，只是当做数据源去使用，比如包、过程、块、表管理等就不太熟悉，只有一个概念性的了解，作为使用最多的关系型数据库之一，还是很有必要去全面学习了解，因此花了一个月时间对oracle来进行全面地学习，下面就是我系统学习的总结。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ouq5z758p.bkt.clouddn.com/oracle/linux_oracle.png">
+<meta property="og:image" content="http://ouq5z758p.bkt.clouddn.com/oracle/tequan1.png">
+<meta property="og:image" content="http://ouq5z758p.bkt.clouddn.com/oracle/tequan2.png">
+<meta property="og:image" content="http://ouq5z758p.bkt.clouddn.com/oracle/tequan3.png">
+<meta property="og:image" content="http://ouq5z758p.bkt.clouddn.com/oracle/mima.png">
+<meta property="og:image" content="http://ouq5z758p.bkt.clouddn.com/oracle/wenben.png">
+<meta property="og:image" content="http://ouq5z758p.bkt.clouddn.com/oracle/delete.png">
+<meta property="og:updated_time" content="2017-08-18T06:11:45.634Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="oracle学习笔记（一）">
+<meta name="twitter:description" content="前言　　接触oralce一年多了，使用时对oracle的了解并不全面，只是当做数据源去使用，比如包、过程、块、表管理等就不太熟悉，只有一个概念性的了解，作为使用最多的关系型数据库之一，还是很有必要去全面学习了解，因此花了一个月时间对oracle来进行全面地学习，下面就是我系统学习的总结。">
+<meta name="twitter:image" content="http://ouq5z758p.bkt.clouddn.com/oracle/linux_oracle.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2015/12/04/oracle1/"/>
+
+
+
+
+
+  <title>oracle学习笔记（一） | 彭磊的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">彭磊的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">架构师之路</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2015/12/04/oracle1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="彭磊">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://www.imgeek.org/uploads/article/20161205/e4fe4fa6257561fd3dfbd506bcae0ee5.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="彭磊的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">oracle学习笔记（一）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-12-04T12:03:16+08:00">
+                2015-12-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>　　接触oralce一年多了，使用时对oracle的了解并不全面，只是当做数据源去使用，比如包、过程、块、表管理等就不太熟悉，只有一个概念性的了解，作为使用最多的关系型数据库之一，还是很有必要去全面学习了解，因此花了一个月时间对oracle来进行全面地学习，下面就是我系统学习的总结。　　<a id="more"></a><br>　　知识点没有前戏(概念性介绍)，知识点间关联也可能不太深，全是干货。</p>
+<hr>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="一-oracle管理"><a href="#一-oracle管理" class="headerlink" title="一 oracle管理"></a>一 oracle管理</h2><h3 id="1-spool"><a href="#1-spool" class="headerlink" title="1 spool"></a>1 spool</h3><p>  查询出来显示在屏幕上数据输出到某一个文件<br>  <code>sql&gt;  spool /home/oracle/aaa.sql;
+ sql &gt;select * from proc;
+sql&gt;spool off;</code><br>则会在/home/oracle目录下有一个aaa.sql，里面记录了刚才查询的数据</p>
+<h3 id="2-设置查询数据每行字符"><a href="#2-设置查询数据每行字符" class="headerlink" title="2 设置查询数据每行字符"></a>2 设置查询数据每行字符</h3><p>  <code>sql&gt;set linesize 150;</code></p>
+<p>注：sql语句需要带分号（select,update等），其他的可不用带分号(如上面的set linesize等)</p>
+<h3 id="3-oracle角色-三种标准角色"><a href="#3-oracle角色-三种标准角色" class="headerlink" title="3 oracle角色 三种标准角色"></a>3 oracle角色 三种标准角色</h3><p>Oracle内部有两个建好的用户：<strong>SYSTEM和SYS</strong>， 用户可直接登录到SYSTEM用户以创建其他用户。</p>
+<h4 id="CONNECT-Role连接角色"><a href="#CONNECT-Role连接角色" class="headerlink" title="CONNECT Role连接角色"></a>CONNECT Role连接角色</h4><p>CONNECT　role的用户除了select、insert、update和delete等，还能够创建表、视图、序列（sequence）、簇（cluster）、同义词（synonym ）、会话（session）和与其他数据库的链（link）。</p>
+<h4 id="RESOURCE-Role-角色"><a href="#RESOURCE-Role-角色" class="headerlink" title="RESOURCE Role(角色)"></a>RESOURCE Role(角色)</h4><p>更可靠和正式的数据库用户可以授予RESOURCE role。RESOURCE提供给用户另外的权限以创建他们自己的表、序列、过程（procedure）、触发器（trigger）、索引（index）和簇（cluster）。</p>
+<h4 id="DBA（数据库管理员角色）"><a href="#DBA（数据库管理员角色）" class="headerlink" title="DBA（数据库管理员角色）"></a>DBA（数据库管理员角色）</h4><p>DBA role拥有所有的系统权限—-包括无限制的空间限额和给其他用户授予各种权限的能力。SYSTEM由DBA用户拥有。<br>     下面介绍一些DBA经常使用的典型权限:</p>
+<p>   （1）grant（授权）命令<br>    <code>grant connect, resource to user01;</code></p>
+<p>   （2）revoke（撤消）权限<br>    <code>revoke connect, resource from user01;</code><br>用法:<br><code>create role STUDENT;
+grant connect,resource to zj_mds;</code></p>
+<h3 id="4-删除用户，必须先删除他的对象"><a href="#4-删除用户，必须先删除他的对象" class="headerlink" title="4 删除用户，必须先删除他的对象"></a>4 删除用户，必须先删除他的对象</h3><p><code>sql&gt;drop user aaa cascade;</code><br>解锁用户：<br><code>sql&gt;alter user scott account unlock;</code></p>
+<h3 id="5-使用profile文件管理用户口令"><a href="#5-使用profile文件管理用户口令" class="headerlink" title="5 使用profile文件管理用户口令"></a>5 使用profile文件管理用户口令</h3><p>   比如：</p>
+<h4 id="①-只允许某个用户最多尝试登陆三次，如果没成功，就锁定两天"><a href="#①-只允许某个用户最多尝试登陆三次，如果没成功，就锁定两天" class="headerlink" title="① 只允许某个用户最多尝试登陆三次，如果没成功，就锁定两天"></a>① 只允许某个用户最多尝试登陆三次，如果没成功，就锁定两天</h4><p><code>SQL&gt; create profile myprofile  limit failed_login_attempts 3 password_lock_time 2;
+Profile created.
+SQL&gt; alter user xiaoer profile myprofile ;
+User altered.
+  SQL&gt; conn xiaoer/x;
+ERROR:
+ORA-01017: invalid username/password; logon denied
+Warning: You are no longer connected to ORACLE.
+SQL&gt; conn xiaoer/dd 
+ERROR:
+ORA-01017: invalid username/password; logon denied
+SQL&gt; conn xiaoer/erer
+ERROR:
+ORA-01017: invalid username/password; logon denied
+SQL&gt; conn xiaoer/eeee
+ERROR:
+ORA-28000: the account is locked</code></p>
+<h4 id="②-需求-一个账号最多十天，宽限期2天，到时必须设置新密码"><a href="#②-需求-一个账号最多十天，宽限期2天，到时必须设置新密码" class="headerlink" title="② 需求  一个账号最多十天，宽限期2天，到时必须设置新密码"></a>② 需求  一个账号最多十天，宽限期2天，到时必须设置新密码</h4><p><code>SQL&gt; create profile myprofile1 limit password_life_time 10 password_grace_time 2;
+Profile created.
+SQL&gt; alter user daer profile myprofile1; 
+User altered.</code></p>
+<h4 id="③不需要profile可以删除"><a href="#③不需要profile可以删除" class="headerlink" title="③不需要profile可以删除"></a>③不需要profile可以删除</h4><p> <code>drop profile myprofile1
+SQL&gt; drop profile myprofile1 cascade;
+Profile dropped.</code></p>
+<h3 id="6-启动oracle服务"><a href="#6-启动oracle服务" class="headerlink" title="6 启动oracle服务"></a>6 启动oracle服务</h3><p><code>&gt;lsnrctl start;</code><br><code>&gt;sqlplus sys/dacp as sysdba</code><br><code>&gt;startup</code><br><img src="http://ouq5z758p.bkt.clouddn.com/oracle/linux_oracle.png" alt="linux"><br>dos 运行systeminfo查看windows信息</p>
+<h3 id="7-特权用户"><a href="#7-特权用户" class="headerlink" title="7 特权用户"></a>7 特权用户</h3><p><img src="http://ouq5z758p.bkt.clouddn.com/oracle/tequan1.png" alt="tequan1"><br>特权用户设置以用户名密码登录 不能用sysdba:<br><img src="http://ouq5z758p.bkt.clouddn.com/oracle/tequan2.png" alt="tequan2"><br><img src="http://ouq5z758p.bkt.clouddn.com/oracle/tequan3.png" alt="tequan3"><br>用system特权用户登录后也会自动切换成sys用户</p>
+<h3 id="8-管理员密码丢了，如何处理"><a href="#8-管理员密码丢了，如何处理" class="headerlink" title="8 管理员密码丢了，如何处理"></a>8 管理员密码丢了，如何处理</h3><p>1 对于普通用户<br>    找dba<br>2 对于特权用户</p>
+<p>一搜索名为PWD 数据库实例名.ora文件<br>     （数据库实例名 是根据实际情况定 比如 orcl）<br>三拷贝一份密码文件<br>四生成新密码文件，在dos控制台下输入命令：<br><img src="http://ouq5z758p.bkt.clouddn.com/oracle/mima.png" alt="mima"></p>
+<hr>
+<h2 id="二-oracle数据类型-表管理"><a href="#二-oracle数据类型-表管理" class="headerlink" title="二 oracle数据类型+表管理"></a>二 oracle数据类型+表管理</h2><h3 id="1-文本、二进制类型"><a href="#1-文本、二进制类型" class="headerlink" title="1 文本、二进制类型"></a>1 文本、二进制类型</h3><p>   主要是varchar1和clob<br>   <img src="http://ouq5z758p.bkt.clouddn.com/oracle/wenben.png" alt="wenben"></p>
+<h3 id="2-数字类型-number"><a href="#2-数字类型-number" class="headerlink" title="2 数字类型 number"></a>2 数字类型 number</h3><ul>
+<li><p>number(p,s)可以存放整数，也可以存放小数，p为有效位，s为小数位<br>1&lt;=p&lt;=38;-84&lt;=s&lt;=127<br>ex:1 number（5,2）存放-999.99到999.99</p>
+</li>
+<li><p>number（4,2）存123.49    报错</p>
+</li>
+<li>number(6,-2) 存 123.49    100<h3 id="3-date日期类型"><a href="#3-date日期类型" class="headerlink" title="3 date日期类型"></a>3 date日期类型</h3>date默认类型是dd-mm-YYYY(天-月-年);<br>如果希望使用自己喜欢的时间格式，则需要借助oracle的函数</li>
+</ul>
+<p>timestamp（n）邮戳类型，当数据进行更新时，会自动更新日期 </p>
+<p> date类型是Oracle常用的日期型变量，他的时间间隔是秒。<br>timestamp是DATE类型的扩展，可以精确到小数秒（fractional_seconds_precision），可以是0 to9，缺省是６。两个timestamp相减的话，不能直接的得到天数，而是得到， 多少天，多少小时，多少秒等</p>
+<h3 id="4-commit"><a href="#4-commit" class="headerlink" title="4 commit"></a>4 commit</h3><p>DML操作后需要commit才能生效</p>
+<p>表添加字段  <code>alter table numbertest add(age number);</code><br>表删除一个字段  <code>alter table numbertest drop column age;</code><br>修改表名<code>rename numbertest to numberaaa;</code><br>修改表字段的类型  <code>alter table numberaaa modify(price number(20,1));</code></p>
+<h3 id="5-字符串和日期必须加单引号"><a href="#5-字符串和日期必须加单引号" class="headerlink" title="5 字符串和日期必须加单引号"></a>5 字符串和日期必须加单引号</h3><p>插入操作，如果给每列都要添加数据，就可以不带列名</p>
+<h3 id="6-删除操作"><a href="#6-删除操作" class="headerlink" title="6  删除操作"></a>6  删除操作</h3><p> truncate table aaa 一定要小心<br><img src="http://ouq5z758p.bkt.clouddn.com/oracle/delete.png" alt="delete"><br>delete恢复删除</p>
+<p><code>sql&gt;savepoint aaa;
+sql&gt;delete from table1;
+ sql&gt;rollback to aaa;</code><br>注意：oracle不区分大小写</p>
+<hr>
+<h2 id="三-oracle查询"><a href="#三-oracle查询" class="headerlink" title="三 oracle查询"></a>三 oracle查询</h2><h3 id="1-NVL-a-0"><a href="#1-NVL-a-0" class="headerlink" title="1 NVL(a,0)"></a>1 NVL(a,0)</h3><p>如果a 为null,返回0 ，如果不为null，则返回本身</p>
+<h3 id="2-的使用"><a href="#2-的使用" class="headerlink" title="2  || 的使用"></a>2  || 的使用</h3><p>在查询的时候，如果希望把多列拼接起来，作为一列返回，可以使用||,具体用法：<br><code>select creater || &#39;创建了程序&#39; || proc_name from proc;</code></p>
+<h3 id="3-锁定用户"><a href="#3-锁定用户" class="headerlink" title="3 锁定用户"></a>3 锁定用户</h3><p> 希望删除用户，同时保留该用户的数据对象，怎么处理?<br> <code>alter user wanger  account lock;</code><br> （解锁: <code>alter user wanger account unlock;</code>）</p>
+<h3 id="4-between-and-like模糊查询-is-null-函数"><a href="#4-between-and-like模糊查询-is-null-函数" class="headerlink" title="4 between  and/like模糊查询/is null 函数"></a>4 between  and/like模糊查询/is null 函数</h3><p>between  and   是一个闭区间<br>like模糊查询:% 表示0到多个字符，_ 表示1个任意字符<br>is null 函数查询为null的条件</p>
+<h3 id="5-order-by子句"><a href="#5-order-by子句" class="headerlink" title="5 order by子句"></a>5 order by子句</h3><p> order by注意是对结果进行排序，默认是升序排列(asc)  降序是desc<br>oracle 支持使用别名排序<br>    <code>select xmlid 主键id from proc order by 主键id;</code></p>
+<h3 id="6-数据分组的五个函数"><a href="#6-数据分组的五个函数" class="headerlink" title="6 数据分组的五个函数"></a>6 数据分组的五个函数</h3><p>max、min、avg、 sum、count<br>注意：</p>
+<ul>
+<li>avg 统计时，如果某一个值为null，则不会统计，也不会算平均值(如果要统计null，可用sum(age)/count(*));</li>
+<li>count(字段)时，也不会去考虑null值 </li>
+<li><p>我们书写sql语句是从左到右，但sql默认执行是在从右到左执行。</p>
+<h3 id="7-group-by-和having子句-一般两个一起出现"><a href="#7-group-by-和having子句-一般两个一起出现" class="headerlink" title="7 group by 和having子句(一般两个一起出现)"></a>7 group by 和having子句(一般两个一起出现)</h3><p>group by 用户对查询结果进行分组<br>having 用于过滤分组显示结果</p>
+</li>
+<li><p>1 分组函数(sum.avg)等，只能出现在选择列表、having、orderby中，不能出现在group by中</p>
+</li>
+<li>2 如果select语句中同时包含groupby,having,order bu 那么他们的顺序是group by,having,order by。1</li>
+<li>3 在选择列中如果有列、表达式和分组函数，那么这些列和表达式必须有一个出现在group by子句中，否则会出错</li>
+</ul>
+<h3 id="8-子查询"><a href="#8-子查询" class="headerlink" title="8 子查询"></a>8 子查询</h3><ul>
+<li>一 子查询中使用all<br>如何显示工资比部门 30 的所有员工的工资高的员工的姓名、工资和部门号：<br><code>select * from emp where sal &gt;all(select sal from emp where deptno =30)</code></li>
+<li>二 子查询中使用any<br>如何显示工资比部门 30 的任意员工的工资高的员工的姓名、工资和部门号：<br><code>select * from emp where sal &gt; any(select sal from emp where deptno = 30)</code></li>
+<li>三 查询与李二的部门和岗位完全相同的雇员<br><code>select * from emp where(deptno,job)=(select deptno,job from emp where ename=&#39;李二&#39;);</code></li>
+<li><p>四 查找每个部门工资最高的人的详细信息</p>
+<p>解法1 <code>select t1.* from emp t1,(select max(sal) hsal,deptno from emp group by deptno ) t2 where t2.deptno=t1.deptno and t1.sal=t2.hsal;</code><br>解法2 <code>select * from emp where sal=(select max(sal) from emp e where e.deptno=deptno);</code><br>注意：当在from子句中使用子查询时，该子查询会被作为一个临时表来对待，当在from子句中使用子查询时，必须给子查询指定别名。</p>
+<h3 id="9-分页查询-各个数据库"><a href="#9-分页查询-各个数据库" class="headerlink" title="9 分页查询 各个数据库"></a>9 分页查询 各个数据库</h3><p>mysql:<br>  select * from 表名 limit 从几条取，取几条；<br>oracle: </p>
+</li>
+</ul>
+<p><code>select t2.* from (select t1.* ,rownum rn from (select * from emp) t1 where rownum&lt;=6) t2  where rn&gt;=4</code><br>说明：上面的sql是oracle数据库效率比较的查询方法；在百万级都可以及时响应<br>oracle使用三层过滤<br>第一层  <code>select * from emp</code><br>第二层  <code>select t1.* ,rownum rn from (select * from emp) t1 where rownum&lt;=6</code><br>第三层  <code>select t2.* from (select t1.* ,rownum rn from (select * from emp) t1 where rownum&lt;=6) t2  where rn&gt;=4</code></p>
+<p>实际上我们把上面的sql当做一个分页模板来对待：<br>6 表示取到第几条<br>4 从第几条开始取</p>
+<h3 id="10-合并查询"><a href="#10-合并查询" class="headerlink" title="10 合并查询"></a>10 合并查询</h3><ul>
+<li>union<br>该操作用于取两个结果集的并集。当使用该操作符时，会自动去掉结果集中重复行</li>
+<li>unionall<br>与union类似，但是不会去重，也不会排序<h3 id="11-minus-差集"><a href="#11-minus-差集" class="headerlink" title="11 minus 差集"></a>11 minus 差集</h3>用于取得两个结果集的差集，它只会显示存在第一个集合中，而且不存在第二个集合中的数据<br><code>select * fom a.emp minus select * from b.emp;</code><h3 id="12-oracle的内连接"><a href="#12-oracle的内连接" class="headerlink" title="12 oracle的内连接"></a>12 oracle的内连接</h3>内连接：是我们用的最多的一种连接，前面我们讲的都是内连接<br> ex:比如我们要显示员工的信息和部门名称，<code>select a.*,b.* from  table1 a,table2 b where a.No=b.No;
+== select a.*,b.* from  table1 a inner join table2 b on a.No=b.No;</code></li>
+</ul>
+<h3 id="13-外链接"><a href="#13-外链接" class="headerlink" title="13 外链接"></a>13 外链接</h3><p>外链接分为：左外连，右连接，完全连接</p>
+<ol>
+<li>左外链接：左侧的表完全显示<pre><code>`select a.*,b.* from  table1 a left join table2 b on a.No=b.No;`
+</code></pre>  或者     <code>select a.*,b.* from  table1 a， table2 b where a.No=b.No(+);</code></li>
+<li><p>右外链接：右侧的表完全显示               </p>
+<pre><code>`  select a.*,b.* from  table1 a right join table2 b on a.No=b.No;`
+</code></pre><p> 或者     <code>select a.*,b.* from  table1 a ，table2 b where</code> a.No（+）=b.No();</p>
+<ol>
+<li>完全外接：两个表查询，不关有没有匹配上，都列出来<br><code>select a.*,b.* from  table1 a full outer join table2 b on a.No=b.No;</code></li>
+</ol>
+<hr>
+</li>
+</ol>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p> 　　<br> 　　本文为oracle的一些基础用法，后面会总结更多用法及知识点，敬请期待，也可入群：四川java/后端交流群：554016502，相互学习讨论！</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/oracle/" rel="tag"># oracle</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/10/20/linux/" rel="next" title="Linux常用命令（全面）">
+                <i class="fa fa-chevron-left"></i> Linux常用命令（全面）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://www.imgeek.org/uploads/article/20161205/e4fe4fa6257561fd3dfbd506bcae0ee5.jpg"
+               alt="彭磊" />
+          <p class="site-author-name" itemprop="name">彭磊</p>
+           
+              <p class="site-description motion-element" itemprop="description">talk is cheap,show me your code</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                    
+                      Twitter
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="www.zhihu.com" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      知乎
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#正文"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-oracle管理"><span class="nav-number">2.1.</span> <span class="nav-text">一 oracle管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-spool"><span class="nav-number">2.1.1.</span> <span class="nav-text">1 spool</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-设置查询数据每行字符"><span class="nav-number">2.1.2.</span> <span class="nav-text">2 设置查询数据每行字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-oracle角色-三种标准角色"><span class="nav-number">2.1.3.</span> <span class="nav-text">3 oracle角色 三种标准角色</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#CONNECT-Role连接角色"><span class="nav-number">2.1.3.1.</span> <span class="nav-text">CONNECT Role连接角色</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RESOURCE-Role-角色"><span class="nav-number">2.1.3.2.</span> <span class="nav-text">RESOURCE Role(角色)</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DBA（数据库管理员角色）"><span class="nav-number">2.1.3.3.</span> <span class="nav-text">DBA（数据库管理员角色）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-删除用户，必须先删除他的对象"><span class="nav-number">2.1.4.</span> <span class="nav-text">4 删除用户，必须先删除他的对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-使用profile文件管理用户口令"><span class="nav-number">2.1.5.</span> <span class="nav-text">5 使用profile文件管理用户口令</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#①-只允许某个用户最多尝试登陆三次，如果没成功，就锁定两天"><span class="nav-number">2.1.5.1.</span> <span class="nav-text">① 只允许某个用户最多尝试登陆三次，如果没成功，就锁定两天</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#②-需求-一个账号最多十天，宽限期2天，到时必须设置新密码"><span class="nav-number">2.1.5.2.</span> <span class="nav-text">② 需求  一个账号最多十天，宽限期2天，到时必须设置新密码</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#③不需要profile可以删除"><span class="nav-number">2.1.5.3.</span> <span class="nav-text">③不需要profile可以删除</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-启动oracle服务"><span class="nav-number">2.1.6.</span> <span class="nav-text">6 启动oracle服务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-特权用户"><span class="nav-number">2.1.7.</span> <span class="nav-text">7 特权用户</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-管理员密码丢了，如何处理"><span class="nav-number">2.1.8.</span> <span class="nav-text">8 管理员密码丢了，如何处理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-oracle数据类型-表管理"><span class="nav-number">2.2.</span> <span class="nav-text">二 oracle数据类型+表管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-文本、二进制类型"><span class="nav-number">2.2.1.</span> <span class="nav-text">1 文本、二进制类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-数字类型-number"><span class="nav-number">2.2.2.</span> <span class="nav-text">2 数字类型 number</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-date日期类型"><span class="nav-number">2.2.3.</span> <span class="nav-text">3 date日期类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-commit"><span class="nav-number">2.2.4.</span> <span class="nav-text">4 commit</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-字符串和日期必须加单引号"><span class="nav-number">2.2.5.</span> <span class="nav-text">5 字符串和日期必须加单引号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-删除操作"><span class="nav-number">2.2.6.</span> <span class="nav-text">6  删除操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-oracle查询"><span class="nav-number">2.3.</span> <span class="nav-text">三 oracle查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-NVL-a-0"><span class="nav-number">2.3.1.</span> <span class="nav-text">1 NVL(a,0)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-的使用"><span class="nav-number">2.3.2.</span> <span class="nav-text">2  || 的使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-锁定用户"><span class="nav-number">2.3.3.</span> <span class="nav-text">3 锁定用户</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-between-and-like模糊查询-is-null-函数"><span class="nav-number">2.3.4.</span> <span class="nav-text">4 between  and/like模糊查询/is null 函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-order-by子句"><span class="nav-number">2.3.5.</span> <span class="nav-text">5 order by子句</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-数据分组的五个函数"><span class="nav-number">2.3.6.</span> <span class="nav-text">6 数据分组的五个函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-group-by-和having子句-一般两个一起出现"><span class="nav-number">2.3.7.</span> <span class="nav-text">7 group by 和having子句(一般两个一起出现)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-子查询"><span class="nav-number">2.3.8.</span> <span class="nav-text">8 子查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-分页查询-各个数据库"><span class="nav-number">2.3.9.</span> <span class="nav-text">9 分页查询 各个数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-合并查询"><span class="nav-number">2.3.10.</span> <span class="nav-text">10 合并查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-minus-差集"><span class="nav-number">2.3.11.</span> <span class="nav-text">11 minus 差集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-oracle的内连接"><span class="nav-number">2.3.12.</span> <span class="nav-text">12 oracle的内连接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-外链接"><span class="nav-number">2.3.13.</span> <span class="nav-text">13 外链接</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">彭磊</span>
+
+  
+</div>
+
+
+  <div class="powered-by">
+    由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  </div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">
+    主题 &mdash;
+    <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+      NexT.Gemini
+    </a>
+  </div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
