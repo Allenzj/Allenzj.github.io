@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="linux 命令 韩顺平," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="前言　　最近公司要部署项目到linux中作演示，并启用多个服务，由于是模块开发的”核心”人员，项目经理将这个光荣而简单的任务交给了我，but，我基本上没用过linux,这可咋办呢，简直要了老命，于是乎向隔壁项目组同事二狗学了10来个命令，总算把服务和项目启起来了。">
+<meta name="keywords" content="linux 命令 韩顺平">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux常用命令（全面）">
+<meta property="og:url" content="http://yoursite.com/2016/10/20/linux/index.html">
+<meta property="og:site_name" content="彭磊的博客">
+<meta property="og:description" content="前言　　最近公司要部署项目到linux中作演示，并启用多个服务，由于是模块开发的”核心”人员，项目经理将这个光荣而简单的任务交给了我，but，我基本上没用过linux,这可咋办呢，简直要了老命，于是乎向隔壁项目组同事二狗学了10来个命令，总算把服务和项目启起来了。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ouq5z758p.bkt.clouddn.com/linux/tcp1.png">
+<meta property="og:image" content="http://ouq5z758p.bkt.clouddn.com/linux/tcp2.png">
+<meta property="og:image" content="http://ouq5z758p.bkt.clouddn.com/linux/rpm1.png">
+<meta property="og:image" content="http://ouq5z758p.bkt.clouddn.com/linuxrpm2.png">
+<meta property="og:image" content="http://ouq5z758p.bkt.clouddn.com/linux/crontab.png">
+<meta property="og:updated_time" content="2017-09-05T08:59:19.755Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux常用命令（全面）">
+<meta name="twitter:description" content="前言　　最近公司要部署项目到linux中作演示，并启用多个服务，由于是模块开发的”核心”人员，项目经理将这个光荣而简单的任务交给了我，but，我基本上没用过linux,这可咋办呢，简直要了老命，于是乎向隔壁项目组同事二狗学了10来个命令，总算把服务和项目启起来了。">
+<meta name="twitter:image" content="http://ouq5z758p.bkt.clouddn.com/linux/tcp1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/10/20/linux/"/>
+
+
+
+
+
+  <title>Linux常用命令（全面） | 彭磊的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">彭磊的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">架构师之路</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/20/linux/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="彭磊">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://www.imgeek.org/uploads/article/20161205/e4fe4fa6257561fd3dfbd506bcae0ee5.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="彭磊的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux常用命令（全面）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-20T10:02:11+08:00">
+                2016-10-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>　　最近公司要部署项目到linux中作演示，并启用多个服务，由于是模块开发的”核心”人员，项目经理将这个光荣而简单的任务交给了我，but，我基本上没用过linux,这可咋办呢，简直要了老命，于是乎向隔壁项目组同事二狗学了10来个命令，总算把服务和项目启起来了。<br>　　<a id="more"></a><br>　　工作几年的老鸟都知道，这是java能力进阶的基础，意识到这个之后，于是决定开始系统地学习linux,用虚拟机搭建centos系统，刚开始看了《鸟哥的Linux私房菜》，看了大概五六十页觉得这本书对Java程序员来说学得太深了(好吧，其实是我太懒了)，果断放弃，后面发现了韩顺平老师的《一周学会Liunx》，听了半个小时觉得老师讲得真的好，特别适合我们这种Java程序员，于是开始做笔记系统学习Linux，本文就是基于视频总结而来。</p>
+<hr>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><ul>
+<li>一 管理命令</li>
+</ul>
+<ol>
+<li>立即关机：<code>shutdown -h now</code></li>
+<li>重启计算机：<code>shutdown -r now</code> or <code>reboot</code></li>
+</ol>
+<hr>
+<ul>
+<li><p>二 文件目录<br> ①root目录 ：  存放root用户的相关文件<br> ② home目录 ： 存放普通用户的相关文件　新建的用户在ｈｏｍｅ下面<br> ③ bin目录　：  存放常用命令的目录<br> ④ sbin目录　： 存放的要具有一定权限才能使用的命令<br> ⑤ mnt目录　：  默认挂载光驱和软驱的目录（也可不用在此目录）<br> ⑥ etc目录　：  存放配置相关文件，比如环境配置<br> ⑦ var目录  :   存放经常变化的数据，eg:<br> ⑧ boot目录　：　存放引导相关的文件，被删除就发现ｌｉｎｕｘ起不来<br> ⑨ usr目录   ：  程序安装默认目录</p>
+<p>显示当前在哪个目录下：<code>pwd</code></p>
+</li>
+</ul>
+<hr>
+<ul>
+<li>三 用户管理</li>
+</ul>
+<ol>
+<li>添加用户：<br> <code>$ useradd xiaoming</code>  　添加用户<br> <code>$ passwd xiaoming</code>    设置密码</li>
+<li>删除用户<br> <code>$ userdel xiaoming</code>　删除用户xiaoming<br> <code>$ userdel -r xiaoming</code>　删除用户以及用户组目录</li>
+<li>示例<br><code>$ useradd -d /home/dag -m dag</code><br><code>$ passwd dag #输入密码 dag</code><br><code>$ chown -R dag:dag /home/dag #赋予权限</code><br><code>$ chmod 760 /home/dag       #赋予权限</code><br>`</li>
+</ol>
+<hr>
+<ul>
+<li>四 指定运行级别</li>
+</ul>
+<ol>
+<li>运行级别:<pre><code>0:关机
+1：单用户 -- root权限，用于系统维护，禁止远程登陆
+2：多用户状态没有网络服务
+3：多用户状态有网络服务 -- 登陆后进入控制台命令行模式
+4：系统未使用保留给用户
+5：图形界面
+6：系统重启
+</code></pre></li>
+<li>常用运行级别是3和5，要修改默认的运行级别可改文件/etc/inittab的id:5:initdefault:这一行中的数字<br>eg:修改5为3<br>  <code>$ vim /etc/innitab</code><br>  <code>$ reboot</code><br> <code>$ startx #开启图形化界面</code></li>
+</ol>
+<hr>
+<ul>
+<li>五 ls mkdir touch ln</li>
+</ul>
+<ol>
+<li><p>ls<br>   <code>$  ls -a</code>　显示隐藏的文件<br>   <code>$ ls -l</code>　显示长列表格式</p>
+<pre><code>`$ ls -al`
+</code></pre></li>
+<li><p>dir<br>  <code>$ mkdir</code>　简历目录<br>  <code>$ rmdir</code>　删除空目录<br>  <code>$ cp -r dir1 dir2</code> 　递归复制命令</p>
+</li>
+<li><p>touch 建立空文件  </p>
+</li>
+<li><p>ln 建立符号链接</p>
+<pre><code>  ln -s 源  目标
+  `$ ln -s /etc/initab inittab` inittab指向实际文件/etc/initab
+eg： `$ ln -s /home/oracle/aaa /home/oracle/bbb   #一定要写全路径 `
+</code></pre></li>
+</ol>
+<hr>
+<ul>
+<li><p>六 more less grep find</p>
+<ol>
+<li><p>more 显示文件内容，带分页</p>
+</li>
+<li><p>less 显示文件内容，带分页</p>
+</li>
+<li><p>| 管道命令–&gt;把上一个命令的结果交给\后面的命令处理</p>
+</li>
+<li><p>grep 搜索<br>eg:<code>$ grep &#39;error&#39; a.js</code><br>–eg:将查找出来的文件转移到一个文件里面<br><code>$ grep -n &#39;error&#39; a.js&gt;error.txt</code></p>
+</li>
+<li><p>find  搜索文件及目录<br><code>$ find / -name a.java</code>– 找到a.java文件<br>搜索一段时间内被存取/变更的文件或目录<br><code>$ find /home -amin -10</code> – 10分钟内存取的文件或目录<br><code>$ find /home -atime -10</code> – 10 小时内<br><code>$ find /home -cmin -10</code>  – 10分钟内更改过的文件或目录<br><code>$ find /home -ctime +10</code> – 10小时前更改过的目录或文件</p>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<ul>
+<li>七 文件所有者，所在组，用户、权限及分配</li>
+</ul>
+<ol>
+<li>linux中添加组<br> <code>$ groupadd  worker</code></li>
+<li>创建用户并分配到组<br><code>$ useradd -g worker  dacpuser</code></li>
+<li>解析：  -rw-r–r–<br>– ①-②rw-③r–④r–<br>  –①： 文件类型  eg:目录(d) 链接(l)<br>  –②： 文件的所有者对该文件的权限<br>  –③： 文件所在组对该文件的权限<br>  –④： 其它组的用户对该文件的权限<br> 权限分为三种：<pre><code>r：可读   4
+w: 可写   2
+x: 可执行 1
+</code></pre>– 如果修改  7 = 4+2+1<br> <code>$ chmod 777 *</code> – 第一个7对所有者权限，第二个7该文件对用户的权限，第三个7 其他组的权限<br>–举例：<br>drwxr-xr-x  2 oracle oinstall       4096 Jan  5 02:17 Videos<br>d 说明这是一个文件夹<br>rwx 文件所有者对该文件有读写执行权限<br>r-x 文件所在组的用户对该文件有读，执行权限，但是没有写权限<br>r-x 其他用户对该文件有读，执行权限，但是没有写权限</li>
+<li>用root用户的权限，可以改变某个用户所在的组<br><code>$ usermod -g 组名 用户名</code>   –  修改用户的组<br><code>$ usermod -d 目录名 用户名</code>  – 改变用户登录的初始目录</li>
+<li><p>ls -ahl 可以看到文件的所有者</p>
+</li>
+<li><p>chown 用户名 文件名 来修改该文件的所有者</p>
+</li>
+</ol>
+<hr>
+<h2 id="扩展命令"><a href="#扩展命令" class="headerlink" title="扩展命令"></a>扩展命令</h2><ul>
+<li><p>一 Linux分区<br>主分区+扩展分区&lt;=4<br>  扩展分区不能直接使用，需要分成逻辑分区<br>  逻辑分区数量没有限制<br>  <code>$ fdisk -l</code>– 查看linux系统分区情况   – root用户查看<br>  <code>$ df [目录全路劲]</code>–查看某个目录是在哪个分区下的<br>  <code>$ df [-参数]</code> – 查看磁盘使用情况 eg:<code>$ df -l  or  df -h</code></p>
+<p>  <code>$ find -size +1000000k</code> 查找操作1000M的文件</p>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p>二 shell</p>
+<ol>
+<li><p>命令—&gt;shell解释编译—-&gt;linux内核</p>
+<p>外：在window上写一个bat，直接点击执行就可以执行</p>
+</li>
+<li>常用shell分类：<br>1 /bin/sh<br>2 /bin/bsh<br>3 /bin/csh</li>
+</ol>
+</li>
+</ul>
+<ol>
+<li>命令补全功能<br> 用户在输入命令时，并不需要输入完整的命令，而系统自动回找出最符合的名称。<br> eg： 输入mk—tab–&gt;出现有mk命令开头的所有命令<pre><code>输入 more p --tab---&gt;找出p字母开头的文件或目录
+</code></pre></li>
+<li>查阅历史记录命令：<br><code>$ history 5</code>:– 显示最近使用的5个命令！<br><code>$ !5</code>:–执行历史编号为5的命令<br><code>$ !ls</code> – 执行最后一次已ls开头的命令</li>
+</ol>
+<hr>
+<ul>
+<li><p>三 tcp/ip基础</p>
+<ol>
+<li><p>主流通讯协议<br>1 应用层（Telnet、FTP和Email等）</p>
+<p>2 传输层（TCP、UDP）</p>
+<p>3 网络层（IP、ICMP、IGMP等）</p>
+<p>4 链路层 （设备驱动程序）</p>
+</li>
+</ol>
+</li>
+</ul>
+<ol>
+<li><p>ip地址与包的路由传递</p>
+<p>tracert 目标ip/域名 – 追踪路由</p>
+<ol>
+<li>setup命令设置网络，运行 <code>$ /etc/rc.d/init.d/network restart</code>命令，使设置生效<br><img src="http://ouq5z758p.bkt.clouddn.com/linux/tcp1.png" alt="tcp1"><br><img src="http://ouq5z758p.bkt.clouddn.com/linux/tcp2.png" alt="tcp2"></li>
+</ol>
+</li>
+</ol>
+<hr>
+<ul>
+<li>四 rpm管理<ol>
+<li><code>$ rpm -qa</code>  – 查询linux中安装了那些rpm软件<br><code>$ rpm -q mysql</code> – 查询是否装了mysql     </li>
+</ol>
+</li>
+</ul>
+<ol>
+<li>samba服务<br><img src="http://ouq5z758p.bkt.clouddn.com/linux/rpm1.png" alt="rpm1"><br><img src="http://ouq5z758p.bkt.clouddn.com/linuxrpm2.png" alt="rpm2"></li>
+</ol>
+<hr>
+<ul>
+<li>五 任务调度crontab -e</li>
+</ul>
+<ol>
+<li>设置命令<br>  <code>$ crontab -e</code></li>
+<li><p>每隔一定时间执行任务<br>   date&gt;/home/mydate– &gt;是替换内容，&gt;&gt;追加<br>   –eg：每天凌晨两点追加数据<br>   <code>$ 0 2 * * * date&gt;&gt;/home/mydate</code><br>   –eg：每隔一分钟执行一次：</p>
+<pre><code>`$ * * * * * date&gt;&gt;/home/mydate`
+</code></pre><p>调度文件规则：<br><img src="http://ouq5z758p.bkt.clouddn.com/linux/crontab.png" alt="crontab"></p>
+</li>
+<li><p>如何调用多个任务？<br>1）在crontab -e 中直接写<br>2） 可以把所有任务，写入到一个可执行文件(shell编程)  –重要，学习！！</p>
+<ol>
+<li>终止任务<br><code>$ conrtab -r</code> 终止任务<br><code>$ conrtab -l</code>:列出有哪些任务</li>
+</ol>
+</li>
+</ol>
+<hr>
+<ul>
+<li>六 进程</li>
+</ul>
+<ol>
+<li><p>ps查看目前系统中，有哪些正在执行，及其执行状况。<br><code>$ ps -a</code> –显示当前终端的所有进程信息<br><code>$ ps -u</code>  – 以用户的格式显示进程信息<br><code>$ ps -x</code>  – 显示后台进程运行的参数<br><code>$ ps -aux</code> –全面显示（静态显示）</p>
+</li>
+<li><p>终止进程<br>  kill 进程号<br>  <code>$ kill -9</code> 进程号 – 强制杀死<br>  <code>$ kill -all</code> 进程号 –杀死进程及其子进程</p>
+</li>
+<li><p>动态监控命令<br> top 命令</p>
+</li>
+</ol>
+<hr>
+<h2 id="底层命令"><a href="#底层命令" class="headerlink" title="底层命令"></a>底层命令</h2><ul>
+<li>一 top命令：动态监控命令</li>
+</ul>
+<ol>
+<li><p>top 命令<br>  <code>[oracle@oracledb ~]$ top</code><br> <code>top - 03:27:34 up 34 min</code>– 系统启动了多久<br>   <code>1 user</code> – 多少个用户在连接<br>   <code>load average: 0.01, 0.00, 0.00</code> – 当前系统负载情况，3个加起来/3大于0.6就表示很紧张了！！！<br>  <code>Tasks: 169 total,   1 running, 168 sleeping,   0 stopped,   0 zombie</code><br>  – 任务：169个进程 1个在运行，168在休眠，0个停止的，0个僵尸进程(一般子进程死了，父进程来不及发现)<br>  <code>Cpu(s):  0.0%us,  0.1%sy,  0.0%ni, 99.9%id,  0.0%wa,  0.0%hi,  0.0%si,  0.0%st</code><br>  –cpu状态：id-&gt;idle表示空闲进程<br>  <code>Mem:   3632044k total,   393084k used,  3238960k free,    48896k buffers</code><br>  – 内存情况<br>  <code>Swap:  3768316k total,        0k used,  3768316k free,   146536k cached</code><br>  – Swap：</p>
+</li>
+<li><p>查看指定用户名的进程<br> top –&gt;u—&gt;用户名</p>
+</li>
+<li>杀死指定进程<br>top—&gt;k—&gt;进程ID号</li>
+<li>指定系统状态更新时间：<br>top -d 10 – 指定系统更新进程的时间未10秒  </li>
+</ol>
+<hr>
+<ul>
+<li>二 date 设置系统时间<ul>
+<li>date命令 – 显示系统时间<br>– 更改系统时间：<br><code>$ date MMDDHHMMCCYY.SS</code> ：值的是：月月日日时时分分年年年年.秒秒</li>
+<li>查看月历：<br> <code>$ cal 3 2002</code>  – 查看2002年3月的月历</li>
+<li>查看年历<br> <code>$ cal 2008</code>  –查看2008年的年历</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p>三 监控网络状态信息 netstat</p>
+<pre><code>用来显示目前整个系统的网络情况。例如目前的连接，数据包传递数据等
+</code></pre><p>   <code>$ netstat -an | more</code><br>   <code>$ netstat -anp |more</code> – 查出端口后，可以kill掉</p>
+<ul>
+<li>显示数据包经历程命令：traceroute<br>eg:<code>$ tranceroute www.baidu.com</code>  <strong><strong><strong><em>*</em></strong></strong></strong>网管专用<ul>
+<li>出现*  是防火墙封掉了ICMP的返回信息，所以我们得不到什么相关的数据包返回数据</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p>四 ssh</p>
+<ol>
+<li><p>配置ip  <code>$ ifconfig eth0 192.168.110.135</code></p>
+<p>/etc/.bashrc –用户登录就指定的文件夹，可以配置开机自启动</p>
+</li>
+</ol>
+<ol>
+<li><code>$ env</code> 查看环境变量文件</li>
+<li>alias 取别名<br><code>$ alias llh=&#39;ls -l /home&#39;</code><br>eg:  <code>$ alias lst=&#39;lsnrctl start&#39;</code><br><code>[oracle@oracledb ~]$ lst</code> — 启动监听</li>
+</ol>
+</li>
+</ul>
+<hr>
+<ul>
+<li><p>五 zip</p>
+<ol>
+<li><p>压缩文件<br><code>$ zip aa.zip</code> 文件名 – 压缩一个文件<br><code>$ zip bb.zip 文件1，文件2</code> –压缩多个文件 eg:zip mix.zip aaaa bbb</p>
+</li>
+<li><p>压缩后自动删除源文件<br><code>$ zip -m file.zip to.txt</code>  – 加一个-m</p>
+</li>
+<li><p>将子目录一起压缩<br><code>$ zip -r file.zip *</code>   </p>
+</li>
+<li><p>解压 unzip<br><code>$ unzip aa.zip</code></p>
+</li>
+<li><p>tar.gz文件<br>– gzip和gunzip处理.gz文件<br><code>$ gunzip file.gz</code></p>
+</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>　　以上是我总结的linux常用命令大全，如有疏漏请多海涵，更多linux相关交流可入群：四川 java/后端交流群：554016502，相互学习讨论！</p>
+<p>　　</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux-命令-韩顺平/" rel="tag"># linux 命令 韩顺平</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/08/20/markdown/" rel="next" title="markdown语法">
+                <i class="fa fa-chevron-left"></i> markdown语法
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/04/oracle1/" rel="prev" title="oracle学习笔记（一）">
+                oracle学习笔记（一） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://www.imgeek.org/uploads/article/20161205/e4fe4fa6257561fd3dfbd506bcae0ee5.jpg"
+               alt="彭磊" />
+          <p class="site-author-name" itemprop="name">彭磊</p>
+           
+              <p class="site-description motion-element" itemprop="description">talk is cheap,show me your code</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                    
+                      Twitter
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="www.zhihu.com" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      知乎
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#正文"><span class="nav-number">2.</span> <span class="nav-text">正文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#常用命令"><span class="nav-number">2.1.</span> <span class="nav-text">常用命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#扩展命令"><span class="nav-number">2.2.</span> <span class="nav-text">扩展命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#底层命令"><span class="nav-number">2.3.</span> <span class="nav-text">底层命令</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结语"><span class="nav-number">3.</span> <span class="nav-text">结语</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">彭磊</span>
+
+  
+</div>
+
+
+  <div class="powered-by">
+    由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  </div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">
+    主题 &mdash;
+    <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+      NexT.Gemini
+    </a>
+  </div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
