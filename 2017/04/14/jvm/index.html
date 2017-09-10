@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="jvm," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="前言　　熟悉jvm虚拟机和jvm调优是Java高级重要的一项技能，如果你一辈子不甘心做一个平庸的coder,那么你就完全有必要去学jvm了，通过对jvm的了解，你可以清楚地知道Java程序是如何执行的，利用工具如jvisualvm调整JVM相关参数提高Java应用的性能，">
+<meta name="keywords" content="jvm">
+<meta property="og:type" content="article">
+<meta property="og:title" content="jvm学习笔记">
+<meta property="og:url" content="http://yoursite.com/2017/04/14/jvm/index.html">
+<meta property="og:site_name" content="彭磊的博客">
+<meta property="og:description" content="前言　　熟悉jvm虚拟机和jvm调优是Java高级重要的一项技能，如果你一辈子不甘心做一个平庸的coder,那么你就完全有必要去学jvm了，通过对jvm的了解，你可以清楚地知道Java程序是如何执行的，利用工具如jvisualvm调整JVM相关参数提高Java应用的性能，">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://ouq5z758p.bkt.clouddn.com/jvm/jvm%E7%BB%93%E6%9E%84.png">
+<meta property="og:image" content="http://ouq5z758p.bkt.clouddn.com/jvm/user.png">
+<meta property="og:image" content="http://ouq5z758p.bkt.clouddn.com/jvm/dui.png">
+<meta property="og:updated_time" content="2017-09-10T08:59:59.463Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="jvm学习笔记">
+<meta name="twitter:description" content="前言　　熟悉jvm虚拟机和jvm调优是Java高级重要的一项技能，如果你一辈子不甘心做一个平庸的coder,那么你就完全有必要去学jvm了，通过对jvm的了解，你可以清楚地知道Java程序是如何执行的，利用工具如jvisualvm调整JVM相关参数提高Java应用的性能，">
+<meta name="twitter:image" content="http://ouq5z758p.bkt.clouddn.com/jvm/jvm%E7%BB%93%E6%9E%84.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/04/14/jvm/"/>
+
+
+
+
+
+  <title>jvm学习笔记 | 彭磊的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">彭磊的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">架构师之路</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/04/14/jvm/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="彭磊">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="http://www.imgeek.org/uploads/article/20161205/e4fe4fa6257561fd3dfbd506bcae0ee5.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="彭磊的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">jvm学习笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-14T12:08:23+08:00">
+                2017-04-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>　　熟悉jvm虚拟机和jvm调优是Java高级重要的一项技能，如果你一辈子不甘心做一个平庸的coder,那么你就完全有必要去学jvm了，通过对jvm的了解，你可以清楚地知道Java程序是如何执行的，利用工具如jvisualvm调整JVM相关参数提高Java应用的性能，<a id="more"></a>可能现在没必要学习jvm，但当你的Java代码跑的极慢的时候你就会关心jvm了。所以本文就自己所学jvm做一个浅显的总结与记录。本文就如下目录来学习jvm：
+　　</p>
+<ul>
+<li>jvm概述和基本概念</li>
+<li>堆、栈、方法区</li>
+<li>了解虚拟机参数</li>
+<li>垃圾回收概念和算法、及对象和分代转换</li>
+<li>垃圾收集器</li>
+</ul>
+<h2 id="so-let’s-go……"><a href="#so-let’s-go……" class="headerlink" title="so,let’s go……"></a>so,let’s go……</h2><h1 id="jvm概述和基本概念"><a href="#jvm概述和基本概念" class="headerlink" title="jvm概述和基本概念"></a>jvm概述和基本概念</h1><h2 id="一-jvm原理"><a href="#一-jvm原理" class="headerlink" title="一 jvm原理"></a>一 jvm原理</h2><p>　　所谓虚拟机，就是一台虚拟机器，是一款用来执行一系列虚拟计算机指令的软件，分为系统虚拟机和程序虚拟机。系统虚拟机如Visual Box、Vware,他们完全是对物理计算机的仿真，提供了一个可运行完整操作系统的软件平台。程序虚拟机典型代表就是Java虚拟机，它专门为执行单个计算机程序而设计，在Java虚拟机中执行的指令称为Java字节码指令。在jvm中运行的软件都被限制于虚拟机提供的资源中。Java发展中出现过很多虚拟机，最初是sun使用的一款叫classic的Java虚拟机。目前最广泛的是HotSpot虚拟机。</p>
+<hr>
+<h2 id="二-Java虚拟机的基本结构"><a href="#二-Java虚拟机的基本结构" class="headerlink" title="二 Java虚拟机的基本结构"></a>二 Java虚拟机的基本结构</h2><ul>
+<li>JVM结构可以分为九个部分，如图：<br>　　<img src="http://ouq5z758p.bkt.clouddn.com/jvm/jvm%E7%BB%93%E6%9E%84.png" alt="jvm结构"></li>
+<li>具体功能：</li>
+</ul>
+<ol>
+<li>类加载子系统<br>负责从文件系统或者网络中加载class信息，加载的信息存放在一块称为方法区的内存空间。</li>
+<li>方法区<br>存放类信息、常量信息、量池信息(1.7以后移到堆里面去了)、包括字符串字面量和数字常量等。<br>常量池中除了包含代码中所定义的各种基本类型（如int、long等等）和对象型（如String及数组）的常量值，还还包含一些以文本形式出现的符号引用，比如：类和接口的全限定名；字段的名称和描述符；方法和名称和描述符。</li>
+<li>Java堆<br>在Java虚拟机启动时建立Java堆，它是Java程序最主要的内存工作区域，几乎所有的对象实例都存放在Java堆中。</li>
+<li>直接内存<br>Java的NIO库允许Java程序直接使用内存，从而提高性能，通常直接内存速度会优于Java堆，读写频繁的场合可能会考虑使用</li>
+<li>Java栈<br>每个虚拟机线程都有一个私有的栈，一个线程的Java栈在线程创建的时候被创建，Java栈中保存着局部变量、方法参数、同时Java的方法调用、返回值等。</li>
+<li>本地方法栈<br>本地方法栈和Java栈类似，最大的不同为本地方法栈用于本地方法调用。Java虚拟机允许Java直接调用本地方法(通常是C编写的)</li>
+<li>垃圾回收系统<br>垃圾回收系统是Java的核心，也是必不可少的，Java有一套自己的垃圾清理机制，开发人员无需手工清理，后面会详细说明。</li>
+<li>PC寄存器<br>PC寄存器是每个线程私有的空间，Java虚拟机会为每个线程创建PC寄存器，在任意时刻，一个Java线程总是在执行一个方法，这个方法被称为当前方法，如果当前方法不是本地方法，PC寄存器就会执行当前正在被执行的指令，如果是本地方法，PC寄存器的值为undefined，寄存器存放如当前执行环境指针、程序计数器、操作栈指针、计算的变量指针等信息。</li>
+<li>执行引擎<br>虚拟机最核心的就是执行引擎，它负责执行虚拟机的字节码，一般用户先进行编译成机器码后执行。</li>
+</ol>
+<hr>
+<h1 id="堆、栈、方法区"><a href="#堆、栈、方法区" class="headerlink" title="堆、栈、方法区"></a>堆、栈、方法区</h1><h2 id="一-堆，栈，方法区之间的关系"><a href="#一-堆，栈，方法区之间的关系" class="headerlink" title="一 堆，栈，方法区之间的关系"></a>一 堆，栈，方法区之间的关系</h2><ul>
+<li>堆解决的是数据存储问题，即数据怎么放，放在哪儿。</li>
+<li>栈解决程序的运行问题，即程序如何执行，或者说如何处理数据。</li>
+<li>方法区则是辅助堆栈的快永久区(Perm),解决堆栈信息的产生，是先决条件。</li>
+<li>我们创建一个新的对象，User：<br>那么User类的的一些信息(类信息、静态信息)都存在于方法区中。<br>而User类被实例化出来之后，被存储到Java堆中的一块内存空间。<br>当我们去使用的时候，都是使用User对象的引用，形如User user = new User();这里的user就是存放在Java栈中，即User真实对象的一个引用。如图：<br><img src="http://ouq5z758p.bkt.clouddn.com/jvm/user.png" alt="user"></li>
+</ul>
+<hr>
+<h2 id="二-Java堆"><a href="#二-Java堆" class="headerlink" title="二 Java堆"></a>二 Java堆</h2><ul>
+<li>Java堆是和Java应用程序关系最密切的内存空间，几乎所有的对象都存在其中，并且Java堆完全是自动化管理的，通过垃圾回收机制，垃圾对象会自动清理，不需要显示地释放。</li>
+<li>根据垃圾回收机制的不同，Java堆有可能拥有不同的结构。最常见的就是将整个Java堆分为老年代和新生代。其中新生代存放新生的对象或者年龄不大的对象，老年代则存放老年对象。</li>
+<li>新生代分为eden区、s0区、s1区，s0和s1又称为from区和to区，他们是两块大小相等并且可以互换角色的空间。</li>
+<li>绝大多数情况下，对象首先分配在eden区，在一次新生代回收后，如果对象还存活，则会进入s0和s1区，之后每经历过一次新生代回收，如果对象存活则它的年龄就+1，当对象达到一定年龄后，则会进入老年代，具体参考后面讲的GC回收的复制算法</li>
+<li>Java堆分配如图：<br><img src="http://ouq5z758p.bkt.clouddn.com/jvm/dui.png" alt="堆"></li>
+</ul>
+<hr>
+<h2 id="三-Java-栈"><a href="#三-Java-栈" class="headerlink" title="三 Java 栈"></a>三 Java 栈</h2><p>　　Java栈是一块线程私有的内存空间，在函数中定义的一些基本类型的变量和对象的引用变量都是在函数栈内存中分配的，当在一段代码定义一个变量时，Java就在栈中为这个变量分配内存，当超过变量的作用域(比如方法内)后，Java会自动释放掉为该变量分配的内存空间，该内存空间可以被立即另作他用。访问栈中的变量速度非常快，仅次于CPU的寄存器。<br>　　一个栈一般由三个部分组成：局部变量表、操作数栈和帧数据区。</p>
+<ul>
+<li>局部变量表：<br>用于存放局部变量和报错函数的参数。</li>
+<li>操作数栈：<br>主要保存计算过程中的中间结果，同时作为计算过程中变量临时的存储空间。</li>
+<li>帧数据区：<br>除了局部变量和操作数栈外，栈还需要一些数据来支持常量池的解析，这里帧数据区保存着访问常量池的指针，方便程序访问常量池(1.7以后常量池移到堆里面去了)；此外，当函数返回或出现异常时，虚拟机必须有一个异常处理表，方便发送异常的时候找回异常的时候的代码，因此异常处理表也会帧数据区的一部分。</li>
+</ul>
+<hr>
+<h2 id="四-方法区"><a href="#四-方法区" class="headerlink" title="四 方法区"></a>四 方法区</h2><p>　　Java方法区和堆一样，方法区是一块所有线程共享的内存区域，它保存着系统的类信息，比如类的字段、方法、常量池等。方法区的大小决定了系统可以保存多少个类，如果系统定义太多的类，导致方法区溢出。虚拟机同样会抛出内存溢出错误，方法区可以理解为永久区(Perm)。</p>
+<hr>
+<h1 id="了解虚拟机参数"><a href="#了解虚拟机参数" class="headerlink" title="了解虚拟机参数"></a>了解虚拟机参数</h1><h2 id="一-虚拟机参数"><a href="#一-虚拟机参数" class="headerlink" title="一 虚拟机参数"></a>一 虚拟机参数</h2><p>　　在虚拟机运行过程中，如果可以跟踪系统的运行状态，那么对于问题的故障排查会有一定的帮助，为此，虚拟机提供了一些跟踪系统状态的参数，使用给定的参数执行jvm，就可以在系统运行时打印相关日志，用于分析实际问题。<br>　　我们进行虚拟机参数配置，其实主要就是围绕着堆、栈、方法区进行配置。</p>
+<h2 id="二-堆分配参数"><a href="#二-堆分配参数" class="headerlink" title="二 堆分配参数"></a>二 堆分配参数</h2><ul>
+<li>-XX:+PrintGC 使用这个参数，虚拟机启动后，只要遇到GC就会打印日志。</li>
+<li>-XX:+UserSerialGC 配置串行回收器。</li>
+<li>-XX:+PrintGCDetails 可以查看jvm详细信息，包括各个区的情况</li>
+<li>-Xms: 设置Java程序启动时初始堆的大小。</li>
+<li>-Xmx: 设置Java程序能获得的最大堆大小。</li>
+<li>新生代配置：</li>
+</ul>
+<ol>
+<li>-Xmn:<br>设置新生代的大小，设置一个比较大的新生代会减少老年代的大小，这个参数对性能以及GC行为有很大的影响，一般新生代大小占整个堆空间的1/3到1/4左右。</li>
+<li>-XX:SurvivorRatio:<br>用来设置新生代中eden区和from/to区的比例，即：-XX:SurvivorRatio=eden/from=eden/to。</li>
+<li>-XX:NewRatio:<br>除了设置新生代的大小(xmn)，还可以使用-XX:NewRatio设置新生代和老年代的比例，即-XX:NewRatio=老年代/新生代(一般为2)</li>
+</ol>
+<ul>
+<li>例如：-Xms20m -Xms5m -XX:+PrintCommandLineFlags:可以详细打印虚拟机参数设置，在eclipose里配置：<code>-Xms5m -Xmx20m -XX:+PrintGCDetails -XX:+UseSerialGC -XX:+PrintCommandLineFlags</code>,代码如下：<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">public class jvm1 &#123;</div><div class="line">	public static void main(String[] args) &#123;</div><div class="line">		    //运行时在eclipose里配置：-Xms5m -Xmx20m -XX:+PrintGCDetails -XX:+UseSerialGC -XX:+PrintCommandLineFlags</div><div class="line">				//查看GC信息</div><div class="line">				System.out.println(&quot;max memory:&quot; + Runtime.getRuntime().maxMemory());</div><div class="line">				System.out.println(&quot;free memory:&quot; + Runtime.getRuntime().freeMemory());</div><div class="line">				System.out.println(&quot;total memory:&quot; + Runtime.getRuntime().totalMemory());</div><div class="line">				</div><div class="line">				byte[] b1 = new byte[1*1024*1024];</div><div class="line">				System.out.println(&quot;分配了1M&quot;);</div><div class="line">				System.out.println(&quot;max memory:&quot; + Runtime.getRuntime().maxMemory());</div><div class="line">				System.out.println(&quot;free memory:&quot; + Runtime.getRuntime().freeMemory());</div><div class="line">				System.out.println(&quot;total memory:&quot; + Runtime.getRuntime().totalMemory());</div><div class="line">				</div><div class="line">				byte[] b2 = new byte[4*1024*1024];</div><div class="line">				System.out.println(&quot;分配了4M&quot;);</div><div class="line">				System.out.println(&quot;max memory:&quot; + Runtime.getRuntime().maxMemory());</div><div class="line">				System.out.println(&quot;free memory:&quot; + Runtime.getRuntime().freeMemory());</div><div class="line">				System.out.println(&quot;total memory:&quot; + Runtime.getRuntime().totalMemory());</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>配置的参数、GC回收日志、jvm各区详细等打印如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">-XX:InitialHeapSize=5242880 -XX:MaxHeapSize=20971520 -XX:+PrintCommandLineFlags -XX:+PrintGCDetails -XX:+UseCompressedClassPointers -XX:+UseCompressedOops -XX:-UseLargePagesIndividualAllocation -XX:+UseSerialGC </div><div class="line">max memory:20316160</div><div class="line">free memory:5321936</div><div class="line">total memory:6094848</div><div class="line">[GC (Allocation Failure) [DefNew: 754K-&gt;191K(1856K), 0.0175049 secs] 754K-&gt;503K(5952K), 0.0314953 secs] [Times: user=0.00 sys=0.00, real=0.03 secs] </div><div class="line">分配了1M</div><div class="line">max memory:20316160</div><div class="line">free memory:4496728</div><div class="line">total memory:6094848</div><div class="line">[GC (Allocation Failure) [DefNew: 1249K-&gt;0K(1856K), 0.0118818 secs][Tenured: 1527K-&gt;1527K(4096K), 0.0042304 secs] 1560K-&gt;1527K(5952K), [Metaspace: 2528K-&gt;2528K(1056768K)], 0.0162313 secs] [Times: user=0.00 sys=0.00, real=0.02 secs] </div><div class="line">分配了4M</div><div class="line">max memory:20316160</div><div class="line">free memory:4565328</div><div class="line">total memory:10358784</div><div class="line">Heap</div><div class="line"> def new generation   total 1920K, used 51K [0x00000000fec00000, 0x00000000fee10000, 0x00000000ff2a0000)</div><div class="line">  eden space 1728K,   3% used [0x00000000fec00000, 0x00000000fec0cfa8, 0x00000000fedb0000)</div><div class="line">  from space 192K,   0% used [0x00000000fedb0000, 0x00000000fedb0000, 0x00000000fede0000)</div><div class="line">  to   space 192K,   0% used [0x00000000fede0000, 0x00000000fede0000, 0x00000000fee10000)</div><div class="line"> tenured generation   total 8196K, used 5623K [0x00000000ff2a0000, 0x00000000ffaa1000, 0x0000000100000000)</div><div class="line">   the space 8196K,  68% used [0x00000000ff2a0000, 0x00000000ff81dd98, 0x00000000ff81de00, 0x00000000ffaa1000)</div><div class="line"> Metaspace       used 2535K, capacity 4486K, committed 4864K, reserved 1056768K</div><div class="line">  class space    used 270K, capacity 386K, committed 512K, reserved 1048576K</div></pre></td></tr></table></figure></p>
+<p>　　不同的堆分布情况，对系统执行会产生一定的影响，在实际工作中，我们可以直接将初始化的堆大小与最大堆大小设置相等，这样的好处是可以减少程序运行时的垃圾回收次数，从而提高性能。同时，尽可能的将对象预留在新生代，减少老年代的GC次数。</p>
+<hr>
+<h2 id="三-堆溢出处理"><a href="#三-堆溢出处理" class="headerlink" title="三 堆溢出处理"></a>三 堆溢出处理</h2><p>　　在Java程序的运行中，如果出现堆空间不足，则会抛出内存溢出的错误OOM(Out of Menory),一旦这类问题发生在生产环境中，可能引起严重的业务中断，Java 虚拟机提供了<code>-XX:+HeapDumpOnOutOfMemoryError</code>,使用该参数可以在内存溢出时导出整个堆栈信息，设置其存放路径<br>　　如：<code>-Xms1m -Xmx1m -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=d:/jvm.dump</code><br>　　一般用工具插件进行堆溢出信息分析，这种方式用得少见！</p>
+<h2 id=""><a href="#" class="headerlink" title="　　"></a>　　</h2><h2 id="四-栈配置"><a href="#四-栈配置" class="headerlink" title="四 栈配置"></a>四 栈配置</h2><p>　　java虚拟机提供了参数 -Xss来指定线程的最大栈空间，整个参数也直接决定了函数可调用的最大深度，<br>　　如：<code>-Xss5M</code>设置栈内存为5M，最大深度可通过递归测试。</p>
+<hr>
+<h2 id="五-方法区"><a href="#五-方法区" class="headerlink" title="五 方法区"></a>五 方法区</h2><p>　　和Java堆一样，方法区是一块所有线程共享的内存区域，它用于保存系统的类信息，方法区(永久区)可以保存多少信息可以对其进行配置，在默认情况下，-XX:MaxPermSize为64MB，如果系统运行时生产大量的类，就需要设置一个合适的方法区，以免出现永久区内存溢出的问题。</p>
+<hr>
+<h2 id="六-Client和Server虚拟机工作模式"><a href="#六-Client和Server虚拟机工作模式" class="headerlink" title="六 Client和Server虚拟机工作模式"></a>六 Client和Server虚拟机工作模式</h2><p>　　目前Java虚拟机支持Clien和Server两种运行模式，使用参数-client可以指定使用Client模式，使用-server即使用Server模式。可以直接在命令行查看当前计算机系统自动选择的运行模式，java -version即可。<br>　　区别：Client模式相对Server启动较快，如果不追求系统的长时间使用，性能仅仅是测试，可以使用Client模式。而server模式启动比较慢，原因是会对其进行复杂的系统性能收集和使用更复杂的算法对程序进行优化。<br>　　一般生产环境都会使用Server模式，长期运行其性能要远远快于Client模式。<br>　　例如：<code>-XX:PermSize=64M -XX:MaxPermSize=64M</code>。</p>
+<p>最后，JVM更多参数设置可参考文章：<a href="http://www.cnblogs.com/redcreen/archive/2011/05/04/2037057.html" target="_blank" rel="external">jvm参数设置、分析</a></p>
+<hr>
+<h1 id="垃圾回收"><a href="#垃圾回收" class="headerlink" title="垃圾回收"></a>垃圾回收</h1><p>　　GC中的垃圾，指存在于内存中、不会再被使用的对象，而回收就相当于把垃圾倒掉。垃圾回收有很多种算法，如：引用计数法，标记清楚法、复制算法、分代、分区的思想。</p>
+<h2 id="一-垃圾收集算法"><a href="#一-垃圾收集算法" class="headerlink" title="一 垃圾收集算法"></a>一 垃圾收集算法</h2><ul>
+<li>引用计数法<br>这是一个比较古老而经典的垃圾收集算法，其核心就是在对象被其他引用时计数器+1，而当引用失效时则-1，但这种方式有非常严重的问题：无法处理循环引用的情况，还有就是每次进行加减操作比较浪费系统性能。(理论而实际不用)</li>
+<li>标记清除法<br>标记清除法即分为标记和清楚两个阶段进行处理内存中的对象，当然这种方式也有非常大的弊端，就是空间碎片问题，垃圾回收后的空间不是连续的，不连续的内存空间的工作效率要低于连续的内存空间。(理论而实际不用)</li>
+<li>复制算法<br>复制算法其核心思想就是将内存空间分为两块，每次只使用其中一块，在垃圾回收时，将正在使用的内存中的存留对象复制到未被使用的内存中去，之后去清楚之前正在使用的内存块中所有的对象，反复去交换两个内存的角色，完成垃圾回收。(新生代的s0和s1就使用了这个算法)</li>
+<li>标记压缩法<br>标记压缩法是在标记清除法基础上做了优化，把存活的对象压缩到内存的一段，而后进行垃圾回收。(老年代使用的是此算法)</li>
+<li>分代算法<br>分代算法是根据对象的特点把内存分为N块，而后根据每个内存的特点使用不同的算法。<br>对于新生代和老年代来说，新生代回收频率很高，但每次耗时都很短，而老年代回收频率较低，但是耗时会相对较长，所以应尽量减少老年代的GC。</li>
+<li>分区算法<br>分区算法主要是将整个内存分为N多个独立空间，每个小空间都可以独立使用，这样细粒度的控制一次回收都少量小空间，而不是对整个空间进行GC，从而提升性能，并减少GC停顿时间。</li>
+</ul>
+<hr>
+<h2 id="二-垃圾回收停顿现象"><a href="#二-垃圾回收停顿现象" class="headerlink" title="二 垃圾回收停顿现象"></a>二 垃圾回收停顿现象</h2><p>　　垃圾回收器的任务是识别和回收垃圾对象进行内存清理，为了让垃圾回收器可以高效的执行，大部分情况下，会要求系统进入一个停顿的状态，停顿的目的是终止所有应用程序，只有这样系统才不会有新的垃圾产生，同时停顿保证了系统状态在某个瞬间的一致性，也有利于更好的标记垃圾对象。因此在垃圾回收时，都会产生应用程序停顿。</p>
+<hr>
+<h2 id="三-对象如何进入老年代"><a href="#三-对象如何进入老年代" class="headerlink" title="三 对象如何进入老年代"></a>三 对象如何进入老年代</h2><p>　　一般而言对象首次创建会被放置在新生代的eden区，如果没有GC介入，则对象不会离开eden区，第一次GC如果没有被回收就会进入s0或s1，那么新生代的对象如何进入老年代呢？一般来讲，只要对象的年龄达到一定的大小，就会自动离开年轻代进入老年代，对象年龄是由对象经历次数GC决定的，在新生代每次GC之后如果对象没有被回收则年龄+1，虚拟机提供了一个参数来控制新生代对象的最大年龄，当超过这个年龄范围就会晋升为老年代。<br>　　根据设置MaxTenuringThreshold参数，可以指定新生代对象经历过多少次回收后进入老年代。配置：<code>-XX:MaxTenuringThreshold=20</code>表示20次GC还没回收就进入老年代，默认是15。<br>　　另外，大对象在新生代eden区无法装入时，也会直接进入老年代。JVM里有个参数可以设置对象的大小超过指定大小后，直接进入老年代。配置：<code>-XX:PretenureSizeThreshold=1000</code>。但要注意的是TLAB区域优先分配空间。</p>
+<hr>
+<h2 id="四-TLAB区"><a href="#四-TLAB区" class="headerlink" title="四 TLAB区"></a>四 TLAB区</h2><p>　　TLAB区几线程本地分配缓存，一个线程专用的内存分配区域，是为了加速对象分配而生的。每个线程都会在eden区产生一个TLAB，该线程独享的的工作区域，Java虚拟机使用这种TLAB区没有锁的开销，避免多线程冲突问题，提高了对象分配的效率。<br>　　TLAB空间不会太大，当大对象无法在TLAB区分配时，则会直接分配到堆上。默认为eden区的1%。<br>设置TLAB区参数如下(不建议自设，默认即可)：</p>
+<ul>
+<li>-XX:+UseTLAB 使用TLAB</li>
+<li>-XX:TLABSize=102400 设置TLAB大小，此时为100Kb</li>
+<li>-XX:TLABRefillWasteFraction=100 设置维护进入TLAB空间的单个对象大小，它是一个比例值，默认是64，即如果对象大于整个空间大小的1/64，则在堆创建对象。</li>
+<li>-XX:+PrintTLAB</li>
+<li>-XX:-ResizeTLAB</li>
+</ul>
+<hr>
+<h1 id="垃圾收集器"><a href="#垃圾收集器" class="headerlink" title="垃圾收集器"></a>垃圾收集器</h1><p>　　在Java虚拟机中，垃圾收集器不仅仅只有一种，什么情况下该使用哪种，对性能又有什么样的影响，这都是我们需要了解的。目前可分为以下五种垃圾回收器：</p>
+<ul>
+<li>串行垃圾回收器</li>
+<li>并行垃圾回收器</li>
+<li>CMS回收器</li>
+<li>G1回收器</li>
+</ul>
+<hr>
+<h2 id="一-串行垃圾回收器"><a href="#一-串行垃圾回收器" class="headerlink" title="一 串行垃圾回收器"></a>一 串行垃圾回收器</h2><p>　　串行回收器是指使用单线程进行垃圾回收的计算器。每次回收时，串行回收器只有一个工作线程，对并行能力较弱的计算机来说，串行回收器的专注性和独占性往往有更好的表现。串行回收器可以在新生代和老年代使用，根据作用于不同的堆空间，分为新生代串行回收器和老年代串行回收器。<br>　　使用<code>-XX:UseSerialGC</code>参数可以设置使用新生代串行回收器和老年代串行回收器。</p>
+<hr>
+<h2 id="二-并行回收器-ParNEW"><a href="#二-并行回收器-ParNEW" class="headerlink" title="二 并行回收器(ParNEW)"></a>二 并行回收器(ParNEW)</h2><p>　　并行回收器在串行回收器基础上做了改进，他可以使用多个线程同时进行垃圾回收，对于计算能力强的计算机而言，可以有效地缩短垃圾回收所需的实际时间。<br>　　ParNew回收器是一个工作在新生代的垃圾回收器，它只是简单地将串行回收器多线程化，他的回收策略算法和串行回收器一样。<br>　　使用<code>-XX:+UseParNewGC</code>可设置新生代ParNew回收器，老年代则使用串行回收器。<br>　　<code>-XX:ParallelGCThreads=</code>参数可只是回收时线程数量。一般最好和计算机的CPU相当，避免过多的线程影响性能。</p>
+<hr>
+<h2 id="三-CMS回收器"><a href="#三-CMS回收器" class="headerlink" title="三 CMS回收器"></a>三 CMS回收器</h2><p>　　CMS全称：Concurrent Mark Sweep 意为并发标记清除，他使用的是标记清除法，主要是关注系统停顿时间。<br>　　使用<code>-XX:+UseConcMarkSweepGC</code>进行设置。<br>　　使用<code>-XX:ConcGCThreads</code>设置并发线程数量。<br>　　CMS并不是独占的回收器，也就是说在垃圾回收的时候，程序仍然在不停的工作，又会有新的垃圾不断的产生，所以在使用CMS的过程中应该确保应用程序的内存足够可用。<br>　　CMS不会等到应用程序饱和的时候才去回收垃圾，而是在某一阀值的时候开始回收，回收阀值可用指定的参数进行配置，<code>-XX:CMSInitiatingOccupancyFraction</code>来指定，默认为68，也就是说当老年代的空间使用了达到68%的时候，会指定CMS回收。如果内存使用率增长很快，在CMS指定时出现了内存不足的情况，此时CMS回收就会失败，虚拟机将会启动老年代串行回收器进行垃圾回收，这回导致应用系统停顿。知道垃圾回收完成后才会正常工作，这个过程GC的停顿时间可能较长，所以应该根据实际情况设置<code>-XX:CMSInitiatingOccupancyFraction</code>阀值。<br>　　由于CMS是基于标记清楚法，所以会存在内存碎片的问题，可以通过参数设置<code>-XX:+UseCMSCompactAtFullConllecion</code>可以使CMS回收完成之后进行一次碎片整理，<code>-XX:CMSFullGCsBeforeCompaction</code>参数可以设置进行多少次CMS回收之后，对内存进行一次压缩。</p>
+<hr>
+<h2 id="四-G1回收器"><a href="#四-G1回收器" class="headerlink" title="四 G1回收器"></a>四 G1回收器</h2><p>　　G1 GC是Jdk7的新特性之一，不同于其他的分代回收算法、G1将堆空间划分成了互相独立的区块，且每类区域空间可以是不连续的。这种划分成多块的理念源于：当并发后台线程寻找可回收的对象时、有些区块包含可回收的对象要比其他区块多很多。虽然在清理这些区块时G1仍然需要暂停应用线程、但可以用相对较少的时间优先回收包含垃圾最多区块。这也是为什么G1命名为Garbage First的原因：第一时间处理垃圾最多的区块。</p>
+<hr>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>　　此博文为简单总结Java虚拟机的概念和配置，不是很深入，权当抛砖引玉，后面会在工作中深入jvm，到时候会就具体场景问题再写博客，也可入群：四川 java/后端交流群：554016502，相互学习讨论！</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/jvm/" rel="tag"># jvm</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/07/springBoot/" rel="next" title="springBoot学习">
+                <i class="fa fa-chevron-left"></i> springBoot学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://www.imgeek.org/uploads/article/20161205/e4fe4fa6257561fd3dfbd506bcae0ee5.jpg"
+               alt="彭磊" />
+          <p class="site-author-name" itemprop="name">彭磊</p>
+           
+              <p class="site-description motion-element" itemprop="description">talk is cheap,show me your code</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/your-user-name" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                    
+                      Twitter
+                    
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="www.zhihu.com" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                    
+                      知乎
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#so-let’s-go……"><span class="nav-number">1.1.</span> <span class="nav-text">so,let’s go……</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#jvm概述和基本概念"><span class="nav-number">2.</span> <span class="nav-text">jvm概述和基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-jvm原理"><span class="nav-number">2.1.</span> <span class="nav-text">一 jvm原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-Java虚拟机的基本结构"><span class="nav-number">2.2.</span> <span class="nav-text">二 Java虚拟机的基本结构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#堆、栈、方法区"><span class="nav-number">3.</span> <span class="nav-text">堆、栈、方法区</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-堆，栈，方法区之间的关系"><span class="nav-number">3.1.</span> <span class="nav-text">一 堆，栈，方法区之间的关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-Java堆"><span class="nav-number">3.2.</span> <span class="nav-text">二 Java堆</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-Java-栈"><span class="nav-number">3.3.</span> <span class="nav-text">三 Java 栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-方法区"><span class="nav-number">3.4.</span> <span class="nav-text">四 方法区</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#了解虚拟机参数"><span class="nav-number">4.</span> <span class="nav-text">了解虚拟机参数</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-虚拟机参数"><span class="nav-number">4.1.</span> <span class="nav-text">一 虚拟机参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-堆分配参数"><span class="nav-number">4.2.</span> <span class="nav-text">二 堆分配参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-堆溢出处理"><span class="nav-number">4.3.</span> <span class="nav-text">三 堆溢出处理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#"><span class="nav-number">4.4.</span> <span class="nav-text">　　</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-栈配置"><span class="nav-number">4.5.</span> <span class="nav-text">四 栈配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五-方法区"><span class="nav-number">4.6.</span> <span class="nav-text">五 方法区</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#六-Client和Server虚拟机工作模式"><span class="nav-number">4.7.</span> <span class="nav-text">六 Client和Server虚拟机工作模式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#垃圾回收"><span class="nav-number">5.</span> <span class="nav-text">垃圾回收</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-垃圾收集算法"><span class="nav-number">5.1.</span> <span class="nav-text">一 垃圾收集算法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-垃圾回收停顿现象"><span class="nav-number">5.2.</span> <span class="nav-text">二 垃圾回收停顿现象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-对象如何进入老年代"><span class="nav-number">5.3.</span> <span class="nav-text">三 对象如何进入老年代</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-TLAB区"><span class="nav-number">5.4.</span> <span class="nav-text">四 TLAB区</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#垃圾收集器"><span class="nav-number">6.</span> <span class="nav-text">垃圾收集器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#一-串行垃圾回收器"><span class="nav-number">6.1.</span> <span class="nav-text">一 串行垃圾回收器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二-并行回收器-ParNEW"><span class="nav-number">6.2.</span> <span class="nav-text">二 并行回收器(ParNEW)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三-CMS回收器"><span class="nav-number">6.3.</span> <span class="nav-text">三 CMS回收器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四-G1回收器"><span class="nav-number">6.4.</span> <span class="nav-text">四 G1回收器</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">彭磊</span>
+
+  
+</div>
+
+
+  <div class="powered-by">
+    由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+  </div>
+
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">
+    主题 &mdash;
+    <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+      NexT.Gemini
+    </a>
+  </div>
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
